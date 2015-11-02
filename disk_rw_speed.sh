@@ -15,7 +15,7 @@ AVERAGE_TIME_ALL=0
 AVERAGE_TIME=0
 OPERATION_TYPE=$1 	# read or write
 
-YOUR_CF_NAME=$2
+YOUR_DISK_NAME=$2
 NUM_ITERATION=$3
 
 if [ $# -ne 3 ]
@@ -44,10 +44,10 @@ Run()
 	case "$OPERATION_TYPE" in
 		"read")
 			echo -e "read 속도 측정 중"
-	 		dd if=/dev/$YOUR_CF_NAME of=/dev/null bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE;;
+	 		dd if=/dev/$YOUR_DISK_NAME of=/dev/null bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE;;
 		"write")
 			echo -e "write 속도 측정 중"
-	 		#dd if=/dev/zero of=/dev/$YOUR_CF_NAME bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE;;
+	 		#dd if=/dev/zero of=/dev/$YOUR_DISK_NAME bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE;;
 	esac
 
 	# 값이 제대로 출력되지 않는다면, 시스템 환경에 맞게 sed 옵션을 수정해야 함.
