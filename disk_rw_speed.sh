@@ -3,8 +3,8 @@
 # Hyeongwan Seo
 
 # [주의]
-# 1. You should adjust sed command options (Execute_dd() function) against the your system requirements.
-# write 테스트할 때는 드라이브가 모두 초기화 되므로 주의해야 합니다.
+# 1. write 테스트할 때는 드라이브가 모두 초기화 되므로 주의해야 합니다.
+# 2. 값이 제대로 출력되지 않는다면, 시스템 환경에 맞게 sed 옵션을 수정해야 함.
 
 DD_ORIGINAL_RESULT_FILE=dd_original_result.txt
 TRIMMED_RESULT_FILE=benchmark_result.txt
@@ -27,8 +27,7 @@ fi
 
 Init()
 {
-	echo -e "\n [About]"
-    echo -e "This program displays your HDD speed(read or write) using dd command.\n\n"
+	echo -e "이 프로그램은 dd 명령어를 이용해서 HDD의 read 또는 write 속도를 측정합니다.\n"
 	touch $DD_ORIGINAL_RESULT_FILE
 	touch $TRIMMED_RESULT_FILE
 	echo -e "\n\n---" >> $TRIMMED_RESULT_FILE
@@ -51,13 +50,7 @@ Run()
 	 		#dd if=/dev/zero of=/dev/$YOUR_CF_NAME bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE;;
 	esac
 
-	# READ
-	# dd if=/dev/$YOUR_CF_NAME of=/dev/null bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE
-
-	# WRITE --> [Warning] Your device erase
-	# dd if=/dev/zero of=/dev/$YOUR_CF_NAME bs=32k count=32000 2> $DD_ORIGINAL_RESULT_FILE
-
-	# [IMPORTANT] You should adjust sed command options 
+	# 값이 제대로 출력되지 않는다면, 시스템 환경에 맞게 sed 옵션을 수정해야 함.
 	bandwidth[$NUM_ITERATION]=`cat $DD_ORIGINAL_RESULT_FILE | grep -o '[0-9.0-9]*' | sed -e '1,7d;9,$d'`
 	time[$NUM_ITERATION]=`cat $DD_ORIGINAL_RESULT_FILE | grep -o '[0-9.0-9]*' | sed -e '1,6d;8,$d'`
 
@@ -80,7 +73,6 @@ Average()
 	AVERAGE_TIME=`echo "$SUM_TIME_ALL $NUM_ITERATION" | awk '{print $1/$2}'`
 	echo -e "Average Time = $AVERAGE_TIME (s)\n" >> $TRIMMED_RESULT_FILE
 	echo -e "Average Time = $AVERAGE_TIME (s)\n" 							
-
 }
 
 Init
@@ -92,4 +84,4 @@ do
 done
 
 Average
-echo -e "[Success!!] A trimmed data(final result) file is located in $TRIMMED_RESULT_FILE \n"
+echo -e "[\e[1;32mSuccess!\e[0m] 반복 횟수별 디스크 속도는 $TRIMMED_RESULT_FILE 파일에 기록되어 있습니다."
